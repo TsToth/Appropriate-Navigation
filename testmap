@@ -2,10 +2,10 @@ import urllib.parse
 import webbrowser
 import requests
 
-main_api = "https://www.mapquestapi.com/directions/v2/route?"
-map_api = "https://www.developer.nrel.gov/api//alt-fuel-stations/v1/nearby-route?"
-mqkey = "HjtEWcDVwNgGTsz4OeAuL8cC0g2wQqwh"
+
+map_api = "https://www.developer.nrel.gov/api/alt-fuel-stations/v1/nearest.format?parameters"
 evkey = "b8OUe9tgtqpB8GKogYA1xhpjlb6G37UgAF6DNNsG"
+
 
 while True:
     orig = input("Starting Location: ")
@@ -14,58 +14,20 @@ while True:
     dest = input("Destination: ")
     if dest == "quit" or dest == "q":
         break
-    url = main_api + urllib.parse.urlencode({"key":key, "from":orig, "to":dest})
-    print("URL: " + (url))
-    json_data = requests.get(url).json()
-    json_data = requests.get(url).json()
-    json_status = json_data["info"]["statuscode"]
-
-
-    
-    Type = "hyb" #this will determine the type of map displayed; map, hyb, sat, light, darkwhile True:
-    
-    fuel_type = input("Enter fuel type: ")
-    if fuel_type == "BD"
-        return fuel_type
-    elif fuel_type == "CNG"
-        return fuel_type
-    elif fuel_type == "ELEC"
-        return fuel_type
-    elif fuel_type == "E85"
-        return fuel_type
-    elif fuel_type == "HY"
-        return fuel_type
-    elif fuel_type == "LNG"
-        return fuel_type
-    elif fuel_type == "LPG"
-        return fuel_type
-    else
-        print "NO VALID FUEL TYPE SELECTED"
-    
-    chrg_type = input("Enter your charger type: ")
-    if chrg_type == "All"
-        return chrg_type
-    elif chrg_type == "NEMA1450"
-        return chrg_type
-    elif chrg_type == "NEMA515"
-        return chrg_type
-    elif chrg_type == "NEMA520"
-        return chrg_type
-    elif chrg_type == "J1772"
-        return chrg_type
-    elif chrg_type == "J1772COMBO"
-        return chrg_type
-    elif chrg_type == "CHADEMO"
-        return chrg_type
-    elif chrg_type == "TESLA"
-        return chrg_type
-    else
-        print "NO VALID CHARGE TYPE SELECTED"
-        
  
+    fuel_type = input("Enter fuel type: ")
+    if fuel_type != ('BD', 'CNG', 'ELEC', 'E85', 'HY', 'LNG', 'LPG'):
+        print ("NO VALID FUEL TYPE SELECTED")
+        break
 
-    map_url = map_api + urllib.parse.urlencode({"api_key":evkey, "start":orig, "end":dest, "size":size, "type":Type, "traffic":traffic})
-        #map url format can be adjusted to display other values, orig and dest pulled from ln 11&14
+    charg_type = input("Enter your charger type: ")
+    if charg_type != ('NEMA1450', 'NEMA515', 'NEMA520', 'J1772', 'J1772COMBO', 'CHADEMO', 'TESLA'):
+        print ("NO VALID CHARGER SELECTED")
+        break        
+ #if fuel and charge dont match program will display message and force quit
+
+    map_url = map_api + urllib.parse.urlencode({"api_key":evkey, "fuel":fuel_type, "ev_connectors":charg_type, "start":orig, "end":dest})
+        #map url format can be adjusted to display other values, orig and dest pulled from ln 11&14. fuel_type and charg_type from lines 19&24
     print("Map: " + (map_url))
     #this while true is used to set the parameters and display the map
     get_url = webbrowser.open(map_url) #this line is used to auto open the URL for the map
