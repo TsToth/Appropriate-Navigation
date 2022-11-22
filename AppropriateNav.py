@@ -90,10 +90,10 @@ def car():
                 #add all fuel types
                 [sg.Button("test")],
                 [sg.Text("Connector Type:")],
-                #add all connector types
+                #add all charger types
                 [sg.Button('Test')],
                 [sg.Text('')],
-                [sg.Button('back') ]]
+                [sg.Button('Back') ]]
     return sg.Window('Appropriate Navigation', layout)
 
 
@@ -145,8 +145,10 @@ while True:
                 while carloop == True:
                     event, values = window.read()
                     #for each button you will need an if statement like so:
-                    #if event == "bd":
-                    #   fuel_type = bd
+                    #if event == "fuel type":
+                    #   fuel_type = type
+                    #if event == "charg type"
+                    #   charg_type = type
                     
                     if event == 'back' or event == sg.WIN_CLOSED:
                         window.close()
