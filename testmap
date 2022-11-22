@@ -56,7 +56,3 @@ while True:
         print("For status code: " + str(json_status) + "; Refer to:")
         print("https://developer.mapquest.com/documentation/directions-api/status-codes")
         print("**************************************************************************\n")
-
-
-
-
