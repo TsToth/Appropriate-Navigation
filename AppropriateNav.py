@@ -43,7 +43,7 @@ MQkey = "efB9HJE5qFfoI6xGr5xqkDmnDAb0oCOe"
 GOVkey = "bBOUe9tgtqpB8GKogYA1xhpjlb6G37UgAF6DNNsG"
 
 sg.theme('Dark2')
-#home GUI
+#Home GUI
 def Home():
     layout = [  [sg.Text('         Welcome to Appropriate navigation')],
                 [sg.Text('               What would you like to do?')],
@@ -54,6 +54,7 @@ def Home():
                 [sg.Button('Navigate'), sg.Text("           "), sg.Button('Map'), sg.Text("            "), sg.Button('Close')]]
     return sg.Window('Appropriate Navigation', layout)
 
+#Help page GUI
 def Tutorial():
     layout = [  [sg.Text('Welcome to Appropriate navigation Tutorial\n')],
                 [sg.Text("1. press the 'Navigate' button")],
@@ -67,18 +68,32 @@ def Tutorial():
 
 #Navigation GUI
 def nav():
-    layout = [  [sg.Text('                                   Welcome to navigation')],
+    layout = [  [sg.Text('                                                           Navigation')],
             [sg.Text("", key='-TEXT-')],  
             [sg.Text("")],
             [sg.Text('Where are you coming from?'), sg.InputText()],
             [sg.Text('Where are you going?          '), sg.InputText()],
             [sg.Text('URL:                                  '), sg.InputText(key='-url-')],            
-            [sg.Button('Route'), sg.Text("    "), sg.Button('Back')]]
+            [sg.Button('Route'), sg.Text("    "), sg.Button('Back'), sg.Text("                                                                    "), sg.Button('Car Settings', key='-CAR-')]]
     return sg.Window('Appropriate Navigation', layout)
+
 #static map GUI
 def map():
     layout = [[ sg.Column(imgViewer)],
               [sg.Button('Close')]] 
+    return sg.Window('Appropriate Navigation', layout)
+
+#Car Settings GUI
+def car():
+    layout = [  [sg.Text('         Car Settings')],
+                [sg.Text('Fuel Type:')],
+                #add all fuel types
+                [sg.Button("test")],
+                [sg.Text("Connector Type:")],
+                #add all connector types
+                [sg.Button('Test')],
+                [sg.Text('')],
+                [sg.Button('back') ]]
     return sg.Window('Appropriate Navigation', layout)
 
 
@@ -122,6 +137,24 @@ while True:
         while true == True:
 
             event, values = window.read()
+            
+            if event == '-CAR-':
+                window.close()
+                window = car()
+                carloop = True
+                while carloop == True:
+                    event, values = window.read()
+                    #for each button you will need an if statement like so:
+                    #if event == "bd":
+                    #   fuel_type = bd
+                    
+                    if event == 'back' or event == sg.WIN_CLOSED:
+                        window.close()
+                        window = nav()
+                    
+                    carloop = False
+                    
+                
             #closes window
             if event == 'Back' or event == sg.WIN_CLOSED:
                 window.close()
