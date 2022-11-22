@@ -89,7 +89,7 @@ def car():
                 [sg.Text('Fuel Type:')],
                 #add all fuel types
                 [sg.Button("test")],
-                [sg.Text("Connector Type:")],
+                [sg.Text("Charger Type:")],
                 #add all charger types
                 [sg.Button('Test')],
                 [sg.Text('')],
