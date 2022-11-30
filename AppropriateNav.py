@@ -59,6 +59,9 @@ sg.theme('Custom')
 def settings():
     layout = [[sg.Text("Settings")],
               [sg.Text("")],
+              [sg.Text("Map Type:")],
+              [sg.Button("Fast Map", key='-fast-'), sg.Button("Detailed Map", key='-detail-')],
+              [sg.Text("")],
               [sg.Text("Menu Themes:")],
               [sg.Button("Default"), sg.Button("Black"), sg.Button("White"), sg.Button("Mage"), sg.Button("Pastel")],
               [sg.Text("")],
@@ -104,26 +107,24 @@ def nav():
     return sg.Window('Appropriate Navigation', layout)
 
 #static map GUI
-def map():
-    layout = [[ sg.Column(imgViewer)],
-              [sg.Button('Close')]] 
-    return sg.Window('Appropriate Navigation', layout)
+#def map():
+#    layout = [[ sg.Column(imgViewer)],
+#              [sg.Button('Close')]] 
+#    return sg.Window('Appropriate Navigation', layout)
 
 #Car Settings GUI
 def car():
     layout = [  [sg.Text('         Car Settings')],
                 [sg.Text('Fuel Type:')],
-                #add all fuel types
                 [sg.Button("BD"),sg.Button("CNG"),sg.Button("ELEC"),sg.Button("E85"),sg.Button("HY"),sg.Button("LNG"),sg.Button("LPG")],
-                [sg.Text("Charger Type:")],
-                #add all charger types
-                [sg.Button('Test')],
                 [sg.Text('')],
-                [sg.Button('Back') ]]
+                [sg.Button('Back', key='-back-')]]
     return sg.Window('Appropriate Navigation', layout)
 
 
 trigger = False
+fastmap = False
+fuel_type = 'none'
 #used to ensure map data exists
 mapcondition = False
 #creates GUI
@@ -148,6 +149,10 @@ while True:
                 true = False
             if event == sg.WIN_CLOSED:
                 break
+            if event == '-fast-':
+                fastmap = True
+            if event == '-detail-':
+                fastmap = False
             if event == "Black":
                 sg.theme('Black')
                 window.close()
@@ -217,22 +222,11 @@ while True:
                     if event == 'LNG':
                         fuel_type = 'LNG'
                     if event == 'LPG':
-                        fuel_type = 'LPG'
-                    #for each button you will need an if statement like so:
-                    #if event == "fuel type":
-                    #   fuel_type = type
-                    #if event == "charg type"
-                    #   charg_type = type
-                    
-                    if event == 'back':
+                        fuel_type = 'LPG'           
+                    if event == '-back-' or event == sg.WIN_CLOSED:
                         window.close()
                         window = nav()
-                    if event == sg.WIN_CLOSED:
-                        break
-                    
-                    carloop = False
-                    
-                
+                        carloop = False
             #closes window
             if event == 'Back':
                 window.close()
@@ -245,33 +239,41 @@ while True:
                 route = True
                 start = values[0]
                 dest = values[1]
-                main_api = "https://www.mapquestapi.com/directions/v2/route?"
                 
-                
-                while route == True:
-                    url = main_api + urllib.parse.urlencode({"key":MQkey, "from":start, "to":dest})
+                if fastmap == False:
+                    map_api = "https://afdc.energy.gov/stations/#/find/route?"
+                    evkey = "b8OUe9tgtqpB8GKogYA1xhpjlb6G37UgAF6DNNsG"
                     
-                    json_data = requests.get(url).json()
-                    json_status = json_data["info"]["statuscode"]
-                    map_api = "https://www.mapquestapi.com/staticmap/v5/map?"
-                    size = "@2x"
-                    Type = "map"
-                    traffic = "flow|con|inc"
-                    map_url = map_api + urllib.parse.urlencode({"key":MQkey, "start":start, "end":dest, "size":size, "type":Type, "traffic":traffic})
-                    #ends loop
-                    if json_status == 0:
-                        window['-TEXT-'].update("Route Saved. You may now view the map")
-                        window['-url-'].update(url)
-                        mapcondition = True
-                    elif json_status == 402 or json_status == 611:
-                        window['-TEXT-'].update("There was an error with one or more of your locations and the route could not be established\nPlease check them and try again")
-                        mapcondition = False
-                    else:
-                        window['-TEXT-'].update("You dun broke it, I dont even know what you did but it dont work no more.\nPlease check your entries, internet and possibly physical well being and try again.")
-                        mapcondition = False
+                    map_url = map_api + urllib.parse.urlencode({"api_key":evkey, "fuel":fuel_type, "start":start, "end":dest})
+                    window['-url-'].update(map_url)
+                    mapcondition = True
                     
+                elif fastmap == True:
+                    while route == True:
+                        main_api = "https://www.mapquestapi.com/directions/v2/route?"
+                        url = main_api + urllib.parse.urlencode({"key":MQkey, "from":start, "to":dest})
                     
-                    route = False
+                        json_data = requests.get(url).json()
+                        json_status = json_data["info"]["statuscode"]
+                        map_api = "https://www.mapquestapi.com/staticmap/v5/map?"
+                        size = "@2x"
+                        Type = "map"
+                        traffic = "flow|con|inc"
+                        map_url = map_api + urllib.parse.urlencode({"key":MQkey, "start":start, "end":dest, "size":size, "type":Type, "traffic":traffic})
+                        #ends loop
+                        if json_status == 0:
+                            window['-TEXT-'].update("Route Saved. You may now view the map")
+                            window['-url-'].update(url)
+                            mapcondition = True
+                        elif json_status == 402 or json_status == 611:
+                            window['-TEXT-'].update("There was an error with one or more of your locations and the route could not be established\nPlease check them and try again")
+                            mapcondition = False
+                        else:
+                            window['-TEXT-'].update("You dun broke it, I dont even know what you did but it dont work no more.\nPlease check your entries, internet and possibly physical well being and try again.")
+                            mapcondition = False
+                        route = False
+                else:
+                    break
     if event == 'Map':
         if mapcondition == False:
             #checks if a map exists or possibly exists
@@ -279,29 +281,29 @@ while True:
             
         else:
             #scrapes map_url from the internet and displays the image as a PNG inside of the GUI
-            window.close()
             if trigger == True:
                 map_url = "https://i.kym-cdn.com/editorials/icons/original/000/004/374/9e5.jpeg"
-            jpg_data = (
-                cloudscraper.create_scraper(browser={"browser": "firefox", "platform": "windows", "mobile": False}).get(map_url).content)
-            #takes the scrape and converts it into a png with the nessicary data for displaying
-            pil_image = Image.open(io.BytesIO(jpg_data))
-            png_bio = io.BytesIO()
-            pil_image.save(png_bio, format="PNG")
-            png_data = png_bio.getvalue()
-            #takes the PNG data conversion above and converts it into a layout for pysimplegui
-            imgViewer = [
-                [sg.Image(data=png_data)]]
-            true = True
-            window = map()
-            while true == True:
-                event, values = window.read()
-            
-                if event == 'Close'or event == sg.WIN_CLOSED:
-                    window.close()
-                    window = Home()
-                    true = False
-                    trigger = False
+            get_url = webbrowser.open(map_url)
+#            jpg_data = (
+#                cloudscraper.create_scraper(browser={"browser": "firefox", "platform": "windows", "mobile": False}).get(map_url).content)
+#            #takes the scrape and converts it into a png with the nessicary data for displaying
+#            pil_image = Image.open(io.BytesIO(jpg_data))
+#            png_bio = io.BytesIO()
+#            pil_image.save(png_bio, format="PNG")
+#            png_data = png_bio.getvalue()
+#            #takes the PNG data conversion above and converts it into a layout for pysimplegui
+#            imgViewer = [
+#                [sg.Image(data=png_data)]]
+#            true = True
+#            window = map()
+#            while true == True:
+#                event, values = window.read()
+#           
+#                if event == 'Close'or event == sg.WIN_CLOSED:
+#                    window.close()
+#                    window = Home()
+#                    true = False
+#                    trigger = False
 
 
 
