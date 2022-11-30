@@ -1,10 +1,11 @@
-import urllib.parse
-import requests
-import PySimpleGUI as sg
-import cloudscraper
 import io
-from PIL import Image
+import urllib.parse
 import webbrowser
+
+import cloudscraper
+import PySimpleGUI as sg
+import requests
+from PIL import Image
 
 #you may need to run the command "python3 -m pip install PySimpleGUI", "python3 -m pip install cloudscraper" and "python3 -m pip install image" to run this code
 
@@ -42,16 +43,41 @@ sg.theme_previewer()           <-throw this code into the program to get a windo
 MQkey = "efB9HJE5qFfoI6xGr5xqkDmnDAb0oCOe"
 GOVkey = "bBOUe9tgtqpB8GKogYA1xhpjlb6G37UgAF6DNNsG"
 
-sg.theme('Dark2')
+#Custom GUI theme
+sg.LOOK_AND_FEEL_TABLE['Custom'] = {'BACKGROUND': '#949494',
+                                        'TEXT': '#000000',
+                                        'INPUT': '#F6F6F6',
+                                        'TEXT_INPUT': '#000000',
+                                        'SCROLL': '#99CC99',
+                                        'BUTTON': ('#000000', '#0687F6'),
+                                        'PROGRESS': ('#D1826B', '#CC8019'),
+                                        'BORDER': 1, 'SLIDER_DEPTH': 0, 
+'PROGRESS_DEPTH': 0, }
+sg.theme('Custom')
+
+#settings GUI
+def settings():
+    layout = [[sg.Text("Settings")],
+              [sg.Text("")],
+              [sg.Text("Menu Themes:")],
+              [sg.Button("Default"), sg.Button("Black"), sg.Button("White"), sg.Button("Mage"), sg.Button("Pastel")],
+              [sg.Text("")],
+              [sg.Button("Back")]
+        
+        
+        
+        
+    ]
+    return sg.Window('Appropriate Navigation', layout)
 #Home GUI
 def Home():
-    layout = [  [sg.Text('         Welcome to Appropriate navigation')],
-                [sg.Text('               What would you like to do?')],
+    layout = [  [sg.Text('                      Welcome to Appropriate navigation')],
+                [sg.Text('                            What would you like to do?')],
                 [sg.Text("", key='-CONDITION-')],
                 [sg.Text("")],
-                [sg.Text('                       '), sg.Button('How To Use', key='-tutorial-')],
+                [sg.Text('                                '), sg.Button('How To Use', key='-tutorial-')],
                 [sg.Text('')],
-                [sg.Button('Navigate'), sg.Text("           "), sg.Button('Map'), sg.Text("            "), sg.Button('Close')]]
+                [sg.Button('Navigate'), sg.Text("        "), sg.Button('Map'), sg.Text("         "), sg.Button('Settings'), sg.Text("        "), sg.Button('Close')]]
     return sg.Window('Appropriate Navigation', layout)
 
 #Help page GUI
@@ -88,7 +114,7 @@ def car():
     layout = [  [sg.Text('         Car Settings')],
                 [sg.Text('Fuel Type:')],
                 #add all fuel types
-                [sg.Button("test")],
+                [sg.Button("test"), sg.Button("test"), sg.Button("test")],
                 [sg.Text("Charger Type:")],
                 #add all charger types
                 [sg.Button('Test')],
@@ -109,6 +135,40 @@ while True:
     #detects user interaction
     event, values = window.read()
     
+    if event == "Settings":
+        window.close()
+        window = settings()
+        true = True
+        while true == True:
+            event, values = window.read()
+            
+            if event == 'Back':
+                window.close()
+                window = Home()
+                true = False
+            if event == sg.WIN_CLOSED:
+                break
+            if event == "Black":
+                sg.theme('Black')
+                window.close()
+                window = settings()
+            if event == "Default":
+                sg.theme('Custom')
+                window.close()
+                window = settings()
+            if event == "White":
+                sg.theme('Default1')
+                window.close()
+                window = settings()
+            if event == "Mage":
+                sg.theme('DarkPurple4')
+                window.close()
+                window = settings()
+            if event == "Pastel":
+                sg.theme('LightGreen4')
+                window.close()
+                window = settings()
+                
     #closes program
     if event == 'Close' or event == sg.WIN_CLOSED:
         break
@@ -150,18 +210,22 @@ while True:
                     #if event == "charg type"
                     #   charg_type = type
                     
-                    if event == 'back' or event == sg.WIN_CLOSED:
+                    if event == 'back':
                         window.close()
                         window = nav()
+                    if event == sg.WIN_CLOSED:
+                        break
                     
                     carloop = False
                     
                 
             #closes window
-            if event == 'Back' or event == sg.WIN_CLOSED:
+            if event == 'Back':
                 window.close()
                 window = Home()
                 true = False
+            if event == sg.WIN_CLOSED:
+                break
             #does Mapquest_parse-json_7's fuction
             if event == 'Route':
                 route = True
