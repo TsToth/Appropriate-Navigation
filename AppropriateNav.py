@@ -114,7 +114,7 @@ def car():
     layout = [  [sg.Text('         Car Settings')],
                 [sg.Text('Fuel Type:')],
                 #add all fuel types
-                [sg.Button("test"), sg.Button("test"), sg.Button("test")],
+                [sg.Button("BD"),sg.Button("CNG"),sg.Button("ELEC"),sg.Button("E85"),sg.Button("HY"),sg.Button("LNG"),sg.Button("LPG")],
                 [sg.Text("Charger Type:")],
                 #add all charger types
                 [sg.Button('Test')],
@@ -204,6 +204,20 @@ while True:
                 carloop = True
                 while carloop == True:
                     event, values = window.read()
+                    if event == 'BD':
+                        fuel_type = 'BD'
+                    if event == 'CNG':
+                        fuel_type = 'CNG'
+                    if event == 'ELEC':
+                        fuel_type = 'ELEC'
+                    if event == 'E85':
+                        fuel_type = 'E85'
+                    if event == 'HY':
+                        fuel_type = 'HY'
+                    if event == 'LNG':
+                        fuel_type = 'LNG'
+                    if event == 'LPG':
+                        fuel_type = 'LPG'
                     #for each button you will need an if statement like so:
                     #if event == "fuel type":
                     #   fuel_type = type
