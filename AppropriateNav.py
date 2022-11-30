@@ -1,11 +1,8 @@
-import io
 import urllib.parse
 import webbrowser
 
-import cloudscraper
 import PySimpleGUI as sg
 import requests
-from PIL import Image
 
 #you may need to run the command "python3 -m pip install PySimpleGUI", "python3 -m pip install cloudscraper" and "python3 -m pip install image" to run this code
 
