@@ -4,10 +4,7 @@ import webbrowser
 import PySimpleGUI as sg
 import requests
 
-#you may need to run the command "python3 -m pip install PySimpleGUI", "python3 -m pip install cloudscraper" and "python3 -m pip install image" to run this code
-
-
-
+#you may need to run the command "python3 -m pip install PySimpleGUI" 
 
 
 """ how to Create GUI's
@@ -74,7 +71,7 @@ def Home():
     layout = [  [sg.Text('                      Welcome to Appropriate navigation')],
                 [sg.Text('                            What would you like to do?')],
                 [sg.Text("", key='-CONDITION-')],
-                [sg.Text("")],
+                [sg.Text("Note: Going more that 50 miles with the 'detailed map' \n                   and 'elec' car setting doesnt work")],
                 [sg.Text('                                '), sg.Button('How To Use', key='-tutorial-')],
                 [sg.Text('')],
                 [sg.Button('Navigate'), sg.Text("        "), sg.Button('Map'), sg.Text("         "), sg.Button('Settings'), sg.Text("        "), sg.Button('Close')]]
@@ -83,8 +80,10 @@ def Home():
 #Help page GUI
 def Tutorial():
     layout = [  [sg.Text('Welcome to Appropriate navigation Tutorial\n')],
+                [sg.Text("(optional) go to settings and select your map type")],
                 [sg.Text("1. press the 'Navigate' button")],
                 [sg.Text("2. Enter your starting location and where you're going.")],
+                [sg.Text("2.5. If you are using the default map\n go to the car settings and select your fuel type\n if you use normal gas, select BD as it wont affect your trip.\n if you're using the 'Fast Map' you dont need this step")],
                 [sg.Text("3. Press the 'Route' button to save that data")],
                 [sg.Text("(Optional) Copy the information that appears in 'URL' \nand enter it into a browser to view the route data")],
                 [sg.Text("4. Go back to the main menu by pressing 'Back'")],
@@ -102,12 +101,6 @@ def nav():
             [sg.Text('URL:                                  '), sg.InputText(key='-url-')],            
             [sg.Button('Route'), sg.Text("    "), sg.Button('Back'), sg.Text("                                                                    "), sg.Button('Car Settings', key='-CAR-')]]
     return sg.Window('Appropriate Navigation', layout)
-
-#static map GUI
-#def map():
-#    layout = [[ sg.Column(imgViewer)],
-#              [sg.Button('Close')]] 
-#    return sg.Window('Appropriate Navigation', layout)
 
 #Car Settings GUI
 def car():
@@ -281,41 +274,3 @@ while True:
             if trigger == True:
                 map_url = "https://i.kym-cdn.com/editorials/icons/original/000/004/374/9e5.jpeg"
             get_url = webbrowser.open(map_url)
-#            jpg_data = (
-#                cloudscraper.create_scraper(browser={"browser": "firefox", "platform": "windows", "mobile": False}).get(map_url).content)
-#            #takes the scrape and converts it into a png with the nessicary data for displaying
-#            pil_image = Image.open(io.BytesIO(jpg_data))
-#            png_bio = io.BytesIO()
-#            pil_image.save(png_bio, format="PNG")
-#            png_data = png_bio.getvalue()
-#            #takes the PNG data conversion above and converts it into a layout for pysimplegui
-#            imgViewer = [
-#                [sg.Image(data=png_data)]]
-#            true = True
-#            window = map()
-#            while true == True:
-#                event, values = window.read()
-#           
-#                if event == 'Close'or event == sg.WIN_CLOSED:
-#                    window.close()
-#                    window = Home()
-#                    true = False
-#                    trigger = False
-
-
-
-
-
-
-#this is just the main block from the original lab, i've implimented it into my UI but leave it here for reference
-#main_api = "https://www.mapquestapi.com/directions/v2/route?"
-#key = "efB9HJE5qFfoI6xGr5xqkDmnDAb0oCOe"
-#main loop
-#while True:
-#    url = main_api + urllib.parse.urlencode({"key":key, "from":start, "to":dest})
-#
-    #retrieve url
-#    json_data = requests.get(url).json()
-    
-    #print url and info sorting
-#    print("URL: " + (url))
