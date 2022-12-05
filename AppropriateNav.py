@@ -234,7 +234,7 @@ while True:
                     map_api = "https://afdc.energy.gov/stations/#/find/route?"
                     evkey = "b8OUe9tgtqpB8GKogYA1xhpjlb6G37UgAF6DNNsG"
                     
-                    map_url = map_api + urllib.parse.urlencode({"api_key":evkey, "fuel":fuel_type, "start":start, "end":dest})
+                    map_url = map_api + urllib.parse.urlencode({"api_key":evkey, "fuel":fuel_type, "start":start, "end":dest, "distance":2})
                     window['-url-'].update(map_url)
                     mapcondition = True
                     
