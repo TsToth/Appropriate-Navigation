@@ -272,5 +272,5 @@ while True:
         else:
             #scrapes map_url from the internet and displays the image as a PNG inside of the GUI
             if trigger == True:
-                map_url = "https://i.kym-cdn.com/editorials/icons/original/000/004/374/9e5.jpeg"
+                map_url = "https://www.imdb.com/title/tt5108870/?ref_=ttls_li_tt"
             get_url = webbrowser.open(map_url)
